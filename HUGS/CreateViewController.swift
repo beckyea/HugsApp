@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import os.log
 
 class CreateViewController: UIViewController, UITextFieldDelegate {
     
@@ -43,6 +44,8 @@ class CreateViewController: UIViewController, UITextFieldDelegate {
         
         let mainViewController = self.storyboard?.instantiateViewController(withIdentifier: "mainViewController") as! MainViewController
         self.navigationController?.pushViewController(mainViewController, animated: true)
+        
+        saveSystemVariables()
     }
     
     
@@ -56,7 +59,19 @@ class CreateViewController: UIViewController, UITextFieldDelegate {
         tap.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tap)
         
-        birthdayPicker.maximumDate = userVars.userBirthday
+        if let savedSystemVars = loadSystemVariables() {
+           os_log("Successfully loaded system variables", log: OSLog.default, type:.debug)
+            userVars.userName = savedSystemVars.userName
+            userVars.userBirthday = savedSystemVars.userBirthday
+            userVars.userWeight = savedSystemVars.userWeight
+            configure()
+        } else {
+            os_log("Did not load system variables", log: OSLog.default, type:.debug)
+        }
+        self.navigationItem.setHidesBackButton(true, animated:true);
+        
+        birthdayPicker.date = userVars.userBirthday
+        birthdayPicker.maximumDate = Date()
         weightLabel.text = userVars.userWeight.description
         unitControl.selectedSegmentIndex = 0
         weightStepper.value = userVars.userWeight
@@ -73,6 +88,20 @@ class CreateViewController: UIViewController, UITextFieldDelegate {
         nameTextField.resignFirstResponder();
         self.view.endEditing(true)
         return true;
+    }
+    
+    func saveSystemVariables() {
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(userVars, toFile:VarsArchiveURL.path)
+        
+        if isSuccessfulSave {
+            os_log("Successfully saved system variables", log: OSLog.default, type:.debug)
+        } else {
+            os_log("Error saving system variables", log: OSLog.default, type:.error)
+        }
+    }
+    
+    func loadSystemVariables() -> SystemVariables? {
+        return NSKeyedUnarchiver.unarchiveObject(withFile: VarsArchiveURL.path) as? SystemVariables
     }
 
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import os.log
 
 class ThresholdViewController : UIViewController {
         
@@ -122,6 +123,8 @@ class ThresholdViewController : UIViewController {
         tempThreshold = tempTempThreshold;
         lightThreshold = tempLightThreshold;
         
+        saveThresholds()
+        
         let mainViewController = self.storyboard?.instantiateViewController(withIdentifier: "mainViewController") as! MainViewController
         self.navigationController?.pushViewController(mainViewController, animated: true)
     }
@@ -180,6 +183,24 @@ class ThresholdViewController : UIViewController {
         setCurrentLabel(noiseCurrentLabel, currentReading: getNoise())
         setCurrentLabel(accelCurrentLabel, currentReading: getAccel())
         setCurrentLabel(tempCurrentLabel, currentReading: Double(getTemp()))
+    }
+    
+    func saveThresholds() {
+        saveThreshold(thresholds: heartRateThreshold, toFile:HRArchiveURL)
+        saveThreshold(thresholds: noiseThreshold, toFile:NoiseArchiveURL)
+        saveThreshold(thresholds: accelThreshold, toFile:AccelArchiveURL)
+        saveThreshold(thresholds: tempThreshold, toFile:TempArchiveURL)
+        saveThreshold(thresholds: lightThreshold, toFile:LightArchiveURL)
+    }
+    
+    func saveThreshold(thresholds: Threshold, toFile: URL) {
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(thresholds, toFile:toFile.path)
+        
+        if isSuccessfulSave {
+            os_log("Successfully saved thresholds", log: OSLog.default, type:.debug)
+        } else {
+            os_log("Error saving thresholds", log: OSLog.default, type:.error)
+        }
     }
         
 }

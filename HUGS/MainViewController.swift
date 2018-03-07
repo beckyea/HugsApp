@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import os.log
 
 class MainViewController: UIViewController {
     
@@ -38,8 +39,21 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if !getConfiguration() {
+            if let savedSystemVars = NSKeyedUnarchiver.unarchiveObject(withFile: VarsArchiveURL.path) as? SystemVariables {
+                os_log("Successfully loaded system variables", log: OSLog.default, type:.debug)
+                userVars = savedSystemVars
+                configure()
+            } else {
+                let createVC = self.storyboard?.instantiateViewController(withIdentifier: "createViewController") as! CreateViewController
+                self.navigationController?.pushViewController(createVC, animated: true)
+            }
+        }
+        
         // Intialize Title
         titleLabel.title = userVars.userName + "'s HUGS"
+        
+        loadThresholds()
         
         setCurrentLabels()
         setRangeLabels()
@@ -92,5 +106,32 @@ class MainViewController: UIViewController {
         } else {
             label.textColor = UIColor.lightGray
         }
+    }
+    
+    func loadThresholds() {
+        if let savedHRThreshold = loadThreshold(fromPath: HRArchiveURL) {
+            os_log("Successfully loaded HR thresholds", log: OSLog.default, type:.debug)
+            heartRateThreshold = savedHRThreshold
+        } else {os_log("Did not load HR thresholds", log: OSLog.default, type:.error) }
+        if let savedNoiseThreshold = loadThreshold(fromPath: NoiseArchiveURL) {
+            os_log("Successfully loaded Noise thresholds", log: OSLog.default, type:.debug)
+            noiseThreshold = savedNoiseThreshold
+        } else {os_log("Did not load Noise thresholds", log: OSLog.default, type:.error) }
+        if let savedAccelThreshold = loadThreshold(fromPath: AccelArchiveURL) {
+            os_log("Successfully loaded Accel thresholds", log: OSLog.default, type:.debug)
+            accelThreshold = savedAccelThreshold
+        } else {os_log("Did not load Accel thresholds", log: OSLog.default, type:.error) }
+        if let savedTempThreshold = loadThreshold(fromPath: TempArchiveURL) {
+            os_log("Successfully loaded Temp thresholds", log: OSLog.default, type:.debug)
+            tempThreshold = savedTempThreshold
+        } else {os_log("Did not load Temp thresholds", log: OSLog.default, type:.error) }
+        if let savedLightThreshold = loadThreshold(fromPath: LightArchiveURL) {
+            os_log("Successfully loaded Light thresholds", log: OSLog.default, type:.debug)
+            lightThreshold = savedLightThreshold
+        } else {os_log("Did not load Light thresholds", log: OSLog.default, type:.error) }
+    }
+    
+    func loadThreshold(fromPath: URL) -> Threshold? {
+        return NSKeyedUnarchiver.unarchiveObject(withFile: fromPath.path) as? Threshold
     }
 }

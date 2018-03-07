@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="mua-DD-kEK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sZX-ez-xG6">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -13,7 +13,7 @@
         <!--Configure HUGS-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="CreateViewController" customModule="HUGS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="createViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BYZ-38-t0r" customClass="CreateViewController" customModule="HUGS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -115,7 +115,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="455" y="131"/>
+            <point key="canvasLocation" x="846" y="131"/>
         </scene>
         <!--MainViewController-->
         <scene sceneID="nfQ-IU-BKi">
@@ -311,7 +311,7 @@
                     <navigationItem key="navigationItem" title="XXX'S HUGS" id="xpv-iL-g2A">
                         <barButtonItem key="leftBarButtonItem" title="Configure" id="hKr-ER-5j3">
                             <connections>
-                                <segue destination="mua-DD-kEK" kind="showDetail" action="showViewController:sender:" id="c5z-De-ZPU"/>
+                                <segue destination="BYZ-38-t0r" kind="show" id="1Eq-gd-cPJ"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Manage" id="3yg-T5-a9b">
@@ -336,7 +336,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xfJ-RR-Hc6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1130.4000000000001" y="130.88455772113943"/>
+            <point key="canvasLocation" x="1469.5999999999999" y="130.88455772113943"/>
         </scene>
         <!--Response Thresholds-->
         <scene sceneID="Hk7-2k-9Cm">
@@ -574,7 +574,7 @@
                     <navigationItem key="navigationItem" title="Response Thresholds" id="hub-Z2-Wav">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="enn-ki-s3c">
                             <connections>
-                                <segue destination="Mgk-8d-GO5" kind="showDetail" action="showViewController:sender:" id="frV-ST-0MV"/>
+                                <segue destination="sZX-ez-xG6" kind="showDetail" action="showViewController:sender:" id="frV-ST-0MV"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="SCd-5s-RlN">
@@ -611,28 +611,25 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A1Z-Jx-sES" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1788" y="130.88455772113943"/>
+            <point key="canvasLocation" x="2127.1999999999998" y="130.88455772113943"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="6ii-Ne-jsf">
+        <scene sceneID="SJr-3q-0Fp">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mua-DD-kEK" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="sZX-ez-xG6" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="yaj-lF-vRv">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="wEo-vR-B7f">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="OVR-fB-Kdw"/>
+                        <segue destination="Mgk-8d-GO5" kind="relationship" relationship="rootViewController" id="j4e-g0-F95"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="3ms-zR-rSc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SJD-NN-vdF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-220" y="131"/>
+            <point key="canvasLocation" x="1470" y="-546"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="tr9-KB-e1s"/>
-    </inferredMetricsTieBreakers>
 </document>
