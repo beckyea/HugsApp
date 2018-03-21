@@ -8,6 +8,7 @@
 
 import Foundation
 import os.log
+import CoreBluetooth
 
 // STRUCTS
 public class SystemVariables : NSObject, NSCoding {
@@ -68,7 +69,6 @@ public class Threshold : NSObject, NSCoding {
         
         self.init(isOn: tempIO, upperBound: tempUB, lowerBound: tempLB)
     }
-    
 }
 
 let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -78,6 +78,11 @@ let NoiseArchiveURL = DocumentsDirectory.appendingPathComponent("noise_threshold
 let AccelArchiveURL = DocumentsDirectory.appendingPathComponent("accel_threshold")
 let TempArchiveURL = DocumentsDirectory.appendingPathComponent("temp_threshold")
 let LightArchiveURL = DocumentsDirectory.appendingPathComponent("light_threshold")
+
+// BLUETOOTH CONNECTIVITY
+let bleDelegate : BluetoothDelegate = BluetoothDelegate()
+var currPeriphDelegate: UartDelegate!
+
 
 // PUBLIC VARIABLES
 public var userVars = SystemVariables(userName: "",
@@ -101,8 +106,15 @@ public func getNoise() -> Double { return currentNoise; }
 public func getTemp() -> Int { return currentTemp; }
 public func getAccel() -> Double { return currentAccel; }
 
+public func setHR(_ hr:Int) { currentHR = hr; }
+public func setNoise(_ noise:Double) { currentNoise = noise; }
+public func setTemp(_ temp:Int) { currentTemp = temp; }
+public func setAccel(_ accel:Double) { currentAccel = accel; }
+
 // TOGGLEABLE STATES
 public var isConnected : Bool = true;
+
+public var inProactiveMode : Bool = true;
 
 private var configured : Bool = false;
 public func getConfiguration() -> Bool { return configured; }
@@ -124,5 +136,28 @@ struct SystemKey {
     static let userName = "userName"
     static let userBirthday = "userBirthday"
     static let userWeight = "userWeight"
+}
+
+// String Manipulation
+extension String {
+    func index(from: Int) -> Index {
+        return self.index(startIndex, offsetBy: from)
+    }
+    
+    func substring(from: Int) -> String {
+        let fromIndex = index(from: from)
+        return substring(from: fromIndex)
+    }
+    
+    func substring(to: Int) -> String {
+        let toIndex = index(from: to)
+        return substring(to: toIndex)
+    }
+    
+    func substring(with r: Range<Int>) -> String {
+        let startIndex = index(from: r.lowerBound)
+        let endIndex = index(from: r.upperBound)
+        return substring(with: startIndex..<endIndex)
+    }
 }
 

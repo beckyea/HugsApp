@@ -8,9 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		0D1B5C071FF690190055EED0 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D1B5C061FF690190055EED0 /* logo.png */; };
+		0D357355205F100C00593963 /* UartDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D357354205F100C00593963 /* UartDelegate.swift */; };
+		0D3573572060B37200593963 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3573562060B37200593963 /* Parser.swift */; };
 		0D68007D204C7B70007B3330 /* ThresholdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D68007C204C7B70007B3330 /* ThresholdViewController.swift */; };
 		0D7152781FFF058200BD2E7F /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D7152771FFF058200BD2E7F /* MainViewController.swift */; };
 		0D71527A1FFF067900BD2E7F /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D7152791FFF067900BD2E7F /* Global.swift */; };
+		0D992B222054C97700D99713 /* UUIDKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D992B212054C97700D99713 /* UUIDKey.swift */; };
+		0D992B242054CDC300D99713 /* BluetoothDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D992B232054CDC300D99713 /* BluetoothDelegate.swift */; };
 		0DA888951FF4AC8000DD73F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DA888941FF4AC8000DD73F8 /* AppDelegate.swift */; };
 		0DA888971FF4AC8000DD73F8 /* CreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DA888961FF4AC8000DD73F8 /* CreateViewController.swift */; };
 		0DA8889A1FF4AC8000DD73F8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0DA888981FF4AC8000DD73F8 /* Main.storyboard */; };
@@ -21,9 +25,13 @@
 
 /* Begin PBXFileReference section */
 		0D1B5C061FF690190055EED0 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		0D357354205F100C00593963 /* UartDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UartDelegate.swift; sourceTree = "<group>"; };
+		0D3573562060B37200593963 /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		0D68007C204C7B70007B3330 /* ThresholdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThresholdViewController.swift; sourceTree = "<group>"; };
 		0D7152771FFF058200BD2E7F /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		0D7152791FFF067900BD2E7F /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
+		0D992B212054C97700D99713 /* UUIDKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDKey.swift; sourceTree = "<group>"; };
+		0D992B232054CDC300D99713 /* BluetoothDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothDelegate.swift; sourceTree = "<group>"; };
 		0DA888911FF4AC8000DD73F8 /* HUGS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HUGS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DA888941FF4AC8000DD73F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0DA888961FF4AC8000DD73F8 /* CreateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateViewController.swift; sourceTree = "<group>"; };
@@ -74,13 +82,17 @@
 			isa = PBXGroup;
 			children = (
 				0DA888941FF4AC8000DD73F8 /* AppDelegate.swift */,
+				0D992B232054CDC300D99713 /* BluetoothDelegate.swift */,
 				0DA888961FF4AC8000DD73F8 /* CreateViewController.swift */,
-				0D7152771FFF058200BD2E7F /* MainViewController.swift */,
-				0D68007C204C7B70007B3330 /* ThresholdViewController.swift */,
 				0D7152791FFF067900BD2E7F /* Global.swift */,
+				0D7152771FFF058200BD2E7F /* MainViewController.swift */,
+				0D3573562060B37200593963 /* Parser.swift */,
+				0D68007C204C7B70007B3330 /* ThresholdViewController.swift */,
+				0D357354205F100C00593963 /* UartDelegate.swift */,
+				0D992B212054C97700D99713 /* UUIDKey.swift */,
 				0DA888981FF4AC8000DD73F8 /* Main.storyboard */,
-				0DA8889E1FF4AC8000DD73F8 /* Assets.xcassets */,
 				0DA888A01FF4AC8000DD73F8 /* LaunchScreen.storyboard */,
+				0DA8889E1FF4AC8000DD73F8 /* Assets.xcassets */,
 				0DA888A31FF4AC8000DD73F8 /* Info.plist */,
 				0DA8889B1FF4AC8000DD73F8 /* HUGS.xcdatamodeld */,
 			);
@@ -160,8 +172,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D992B222054C97700D99713 /* UUIDKey.swift in Sources */,
 				0D68007D204C7B70007B3330 /* ThresholdViewController.swift in Sources */,
+				0D3573572060B37200593963 /* Parser.swift in Sources */,
 				0DA888971FF4AC8000DD73F8 /* CreateViewController.swift in Sources */,
+				0D357355205F100C00593963 /* UartDelegate.swift in Sources */,
+				0D992B242054CDC300D99713 /* BluetoothDelegate.swift in Sources */,
 				0DA888951FF4AC8000DD73F8 /* AppDelegate.swift in Sources */,
 				0DA8889D1FF4AC8000DD73F8 /* HUGS.xcdatamodeld in Sources */,
 				0D71527A1FFF067900BD2E7F /* Global.swift in Sources */,

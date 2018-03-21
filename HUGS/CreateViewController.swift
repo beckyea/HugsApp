@@ -7,10 +7,12 @@
 
 import UIKit
 import os.log
+import CoreBluetooth
 
 class CreateViewController: UIViewController, UITextFieldDelegate {
     
     var currWeightLb : Double = 40.0;
+    var timer = Timer()
     
     @IBOutlet weak var titleText: UINavigationItem!
     @IBOutlet var nameTextField : UITextField!
@@ -18,6 +20,27 @@ class CreateViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var weightStepper : UIStepper!
     @IBOutlet var birthdayPicker: UIDatePicker!
     @IBOutlet var unitControl: UISegmentedControl!
+    
+    @IBOutlet weak var peripheralTableView: UITableView!
+    @IBOutlet weak var refreshButton: UIButton!
+    
+    @IBAction func refreshAction(_ sender: AnyObject) {
+        if !(bleDelegate.bluetoothEnabled()) {
+            print("Bluetooth is off")
+            let bluetoothAlert = UIAlertController(title:"Bluetooth Off", message:"Please turn on Bluetooth to refresh", preferredStyle: .alert)
+            bluetoothAlert.addAction(UIAlertAction(title:"Cancel", style:.default, handler: {_ in NSLog("Override Cancelled")}))
+            self.present(bluetoothAlert, animated:true, completion:nil)
+        }
+        bleDelegate.refresh()
+        self.timer.invalidate()
+        Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(reloadTable), userInfo: nil, repeats: false)
+        
+
+    }
+    
+    @objc func reloadTable() {
+        self.peripheralTableView.reloadData()
+    }
     
     @IBAction func stepperValueChanged(sender: UIStepper) {
         currWeightLb = sender.value
@@ -53,6 +76,10 @@ class CreateViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         self.nameTextField.delegate = self;
+        
+        self.peripheralTableView.delegate = bleDelegate
+        self.peripheralTableView.dataSource = bleDelegate
+        self.peripheralTableView.reloadData()
 
         // Close TextField when clicked outside of keyboard region
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
@@ -103,6 +130,21 @@ class CreateViewController: UIViewController, UITextFieldDelegate {
     func loadSystemVariables() -> SystemVariables? {
         return NSKeyedUnarchiver.unarchiveObject(withFile: VarsArchiveURL.path) as? SystemVariables
     }
-
 }
 
+
+class PeripheralTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var peripheralLabel: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+    }
+    
+}

@@ -17,11 +17,24 @@ class MainViewController: UIViewController {
     @IBOutlet weak var currentNoiseLabel: UILabel!
     @IBOutlet weak var currentTempLabel: UILabel!
     @IBOutlet weak var currentAccelLabel: UILabel!
+    @IBOutlet weak var statusLabel: UILabel!
     
+    @IBOutlet weak var modeSegmentedControl: UISegmentedControl!
     @IBOutlet weak var rangeHRLabel: UILabel!
     @IBOutlet weak var rangeNoiseLabel: UILabel!
     @IBOutlet weak var rangeTempLabel: UILabel!
     @IBOutlet weak var rangeAccelLabel: UILabel!
+    
+    @IBAction func modeControlChanged(_ sender: Any) {
+        switch modeSegmentedControl.selectedSegmentIndex {
+        case 0: inProactiveMode = true;
+        case 1: inProactiveMode = false;
+        default: break;
+        }
+        broadcastSettings()
+        
+    }
+    
     
     @IBAction func overrideButtonClicked(_ sender: Any) {
         var popUpWord: String = "inflate";
@@ -30,11 +43,18 @@ class MainViewController: UIViewController {
         let overrideAlert = UIAlertController(title:"Override Confirmation", message:popUpMessage, preferredStyle: .alert)
         overrideAlert.addAction(UIAlertAction(title:"Confirm", style:.default, handler: {_ in NSLog("Override Confirmed");
             setActivationStatus(!getActivationStatus());
-            self.setOverideStatusLabel()}))
+            self.setOverideStatusLabel();
+            self.broadcastSettings()}))
         overrideAlert.addAction(UIAlertAction(title:"Cancel", style:.default, handler: {_ in NSLog("Override Cancelled")}))
         self.present(overrideAlert, animated:true, completion:nil)
     }
     
+    @IBAction func refreshButtonClicked(_ sender: Any) {
+        setCurrentLabels()
+        setDeviceStatusButton()
+        broadcastNewThresholds()
+        broadcastSettings()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,9 +74,12 @@ class MainViewController: UIViewController {
         titleLabel.title = userVars.userName + "'s HUGS"
         
         loadThresholds()
+        setDeviceStatusButton()
         
         setCurrentLabels()
         setRangeLabels()
+        broadcastNewThresholds()
+        broadcastSettings()
         
     }
     
@@ -70,6 +93,26 @@ class MainViewController: UIViewController {
             overrideStatusLabel.text = "Inflated"
         } else {
             overrideStatusLabel.text = "Deflated"
+        }
+    }
+    
+    func setDeviceStatusButton() {
+        if (currPeriphDelegate == nil) {
+            statusLabel.text = "Not Connected";
+        } else {
+            statusLabel.text = "Connected";
+        }
+    }
+    
+    func broadcastSettings() {
+        if (currPeriphDelegate != nil) {
+            currPeriphDelegate.writeSettings();
+        }
+    }
+    
+    func broadcastNewThresholds() {
+        if (currPeriphDelegate != nil) {
+            currPeriphDelegate.writeThresholds();
         }
     }
     
