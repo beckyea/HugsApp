@@ -27,6 +27,8 @@ public class SystemVariables : NSObject, NSCoding {
         aCoder.encode(self.userName, forKey: SystemKey.userName)
         aCoder.encode(self.userBirthday, forKey: SystemKey.userBirthday)
         aCoder.encode(self.userWeight, forKey: SystemKey.userWeight)
+        aCoder.encode(pressureValue, forKey: SystemKey.pressureApp)
+
     }
     
     required convenience public init?(coder aDecoder:NSCoder) {
@@ -39,6 +41,8 @@ public class SystemVariables : NSObject, NSCoding {
             return nil
         }
         let tempUW = aDecoder.decodeDouble(forKey: SystemKey.userWeight) as Double
+        
+        pressureValue = aDecoder.decodeDouble(forKey: SystemKey.pressureApp) as Double
         
         self.init(userName: tempUN, userBirthday: tempUB, userWeight: tempUW)
     }
@@ -112,9 +116,7 @@ public func setTemp(_ temp:Int) { currentTemp = temp; }
 public func setAccel(_ accel:Double) { currentAccel = accel; }
 
 // TOGGLEABLE STATES
-public var isConnected : Bool = true;
-
-public var inProactiveMode : Bool = true;
+public var inProactiveMode : Bool = false;
 
 private var configured : Bool = false;
 public func getConfiguration() -> Bool { return configured; }
@@ -123,6 +125,8 @@ public func configure() { configured = true; }
 private var isOn : Bool = false;
 public func getActivationStatus() -> Bool { return isOn; }
 public func setActivationStatus(_ newState: Bool) { isOn = newState; }
+public var pressureValue : Double = 0.75;
+
 
 
 // Stuff for Persistence
@@ -130,12 +134,14 @@ struct ThresholdKey {
     static let isOn = "isOn"
     static let upperBound = "upperBound"
     static let lowerBound = "lowerBound"
+    static let pressureApp = "pressureApp"
 }
 
 struct SystemKey {
     static let userName = "userName"
     static let userBirthday = "userBirthday"
     static let userWeight = "userWeight"
+    static let pressureApp = "pressureApp"
 }
 
 // String Manipulation
@@ -160,4 +166,3 @@ extension String {
         return substring(with: startIndex..<endIndex)
     }
 }
-

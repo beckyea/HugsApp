@@ -15,10 +15,15 @@ public func parseCurrValueString(_ str: String) {
     var i_index : Int!;
     for (index, char) in str.enumerated() {
         if (char == "h" && h_index == nil) { h_index = index; }
+        else if (char == "h") { h_index = nil; }
         if (char == "n" && n_index == nil) { n_index = index; }
+        else if (char == "n") { n_index = nil; }
         if (char == "t" && t_index == nil) { t_index = index; }
+        else if (char == "t") { t_index = nil; }
         if (char == "a" && a_index == nil) { a_index = index; }
+        else if (char == "a") { a_index = nil; }
         if (char == "i" && i_index == nil) { i_index = index; }
+        else if (char == "i") { i_index = nil; }
 
     }
     if (h_index != nil && n_index != nil && n_index > h_index) {
@@ -38,7 +43,9 @@ public func parseCurrValueString(_ str: String) {
         setAccel(Double(tempAccel)!);
     }
     if (i_index != nil && i_index + 1 < str.count) {
-        setActivationStatus(str.substring(with: i_index+1..<i_index+2) == "1");
+        if (inProactiveMode) {
+            setActivationStatus(str.substring(with: i_index+1..<i_index+2) == "1");
+        }
     }
 }
 
@@ -69,6 +76,9 @@ public func createSettingsString() -> String {
     s += String(getActivationStatus() ? 1 : 0);
     s += ",";
     s += String(userVars.userWeight);
+    s += ",";
+    s += String(pressureValue);
     s+="\n";
+    print(s);
     return s;
 }

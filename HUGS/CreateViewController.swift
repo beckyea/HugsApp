@@ -75,11 +75,17 @@ class CreateViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let font = UIFont.systemFont(ofSize: 24)
+        unitControl.setTitleTextAttributes([NSAttributedStringKey.font: font],
+                                                    for: .normal)
+        
         self.nameTextField.delegate = self;
         
         self.peripheralTableView.delegate = bleDelegate
         self.peripheralTableView.dataSource = bleDelegate
         self.peripheralTableView.reloadData()
+        
+        refreshAction(self);
 
         // Close TextField when clicked outside of keyboard region
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))

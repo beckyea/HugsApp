@@ -24,6 +24,9 @@ class MainViewController: UIViewController {
     @IBOutlet weak var rangeNoiseLabel: UILabel!
     @IBOutlet weak var rangeTempLabel: UILabel!
     @IBOutlet weak var rangeAccelLabel: UILabel!
+    @IBOutlet weak var pressureSlider: UISlider!
+    
+    var refreshTimer: Timer!
     
     @IBAction func modeControlChanged(_ sender: Any) {
         switch modeSegmentedControl.selectedSegmentIndex {
@@ -35,6 +38,11 @@ class MainViewController: UIViewController {
         
     }
     
+    @IBAction func pressureSliderChanged(_ sender: UISlider) {
+        pressureValue = Double(Int(sender.value*10)) * 0.1
+        broadcastSettings()
+
+    }
     
     @IBAction func overrideButtonClicked(_ sender: Any) {
         var popUpWord: String = "inflate";
@@ -43,20 +51,28 @@ class MainViewController: UIViewController {
         let overrideAlert = UIAlertController(title:"Override Confirmation", message:popUpMessage, preferredStyle: .alert)
         overrideAlert.addAction(UIAlertAction(title:"Confirm", style:.default, handler: {_ in NSLog("Override Confirmed");
             setActivationStatus(!getActivationStatus());
+            if (!getActivationStatus()) {
+                inProactiveMode = false;
+                self.modeSegmentedControl.selectedSegmentIndex = 1;
+            }
             self.setOverideStatusLabel();
-            self.broadcastSettings()}))
+            self.broadcastSettings()
+        }))
         overrideAlert.addAction(UIAlertAction(title:"Cancel", style:.default, handler: {_ in NSLog("Override Cancelled")}))
         self.present(overrideAlert, animated:true, completion:nil)
     }
     
-    @IBAction func refreshButtonClicked(_ sender: Any) {
+    @objc func refreshAction() {
         setCurrentLabels()
+        setOverideStatusLabel()
         setDeviceStatusButton()
-        broadcastNewThresholds()
-        broadcastSettings()
     }
     
     override func viewDidLoad() {
+        
+        let font = UIFont.systemFont(ofSize: 24)
+        modeSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.font: font],
+                                                for: .normal)
         super.viewDidLoad()
         
         if !getConfiguration() {
@@ -80,6 +96,17 @@ class MainViewController: UIViewController {
         setRangeLabels()
         broadcastNewThresholds()
         broadcastSettings()
+        
+        if inProactiveMode {
+            modeSegmentedControl.selectedSegmentIndex = 0
+        } else {
+            modeSegmentedControl.selectedSegmentIndex = 1
+        }
+        
+        
+        pressureSlider.setValue(Float(pressureValue), animated: true)
+        
+        refreshTimer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(refreshAction), userInfo: nil, repeats: true)
         
     }
     
@@ -118,11 +145,11 @@ class MainViewController: UIViewController {
     
     func setCurrentLabels() {
         currentHRLabel.text = String(getHR())
-        currentNoiseLabel.text = String(getNoise())
+        currentNoiseLabel.text = String(format: "%.1f", getNoise())
         currentTempLabel.text = String(getTemp())
         currentAccelLabel.text = String(getAccel())
         var textColor : UIColor;
-        if isConnected { textColor = UIColor.black } else { textColor =  UIColor.gray }
+        if (currPeriphDelegate != nil) { textColor = UIColor.black } else { textColor =  UIColor.white }
         currentHRLabel.textColor = textColor
         currentNoiseLabel.textColor = textColor
         currentTempLabel.textColor = textColor
