@@ -18,6 +18,8 @@ class MainViewController: UIViewController {
     @IBOutlet weak var currentTempLabel: UILabel!
     @IBOutlet weak var currentAccelLabel: UILabel!
     @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var lightLabel: UILabel!
+    @IBOutlet weak var activeLabel: UILabel!
     
     @IBOutlet weak var modeSegmentedControl: UISegmentedControl!
     @IBOutlet weak var rangeHRLabel: UILabel!
@@ -25,6 +27,8 @@ class MainViewController: UIViewController {
     @IBOutlet weak var rangeTempLabel: UILabel!
     @IBOutlet weak var rangeAccelLabel: UILabel!
     @IBOutlet weak var pressureSlider: UISlider!
+    
+    @IBOutlet weak var pressureView: LevelView!
     
     var refreshTimer: Timer!
     
@@ -41,6 +45,7 @@ class MainViewController: UIViewController {
     @IBAction func pressureSliderChanged(_ sender: UISlider) {
         pressureValue = Double(Int(sender.value*10)) * 0.1
         broadcastSettings()
+        drawCurrentPressure()
 
     }
     
@@ -57,6 +62,7 @@ class MainViewController: UIViewController {
             }
             self.setOverideStatusLabel();
             self.broadcastSettings()
+            self.drawCurrentPressure()
         }))
         overrideAlert.addAction(UIAlertAction(title:"Cancel", style:.default, handler: {_ in NSLog("Override Cancelled")}))
         self.present(overrideAlert, animated:true, completion:nil)
@@ -96,6 +102,7 @@ class MainViewController: UIViewController {
         setRangeLabels()
         broadcastNewThresholds()
         broadcastSettings()
+        drawCurrentPressure()
         
         if inProactiveMode {
             modeSegmentedControl.selectedSegmentIndex = 0
@@ -121,6 +128,7 @@ class MainViewController: UIViewController {
         } else {
             overrideStatusLabel.text = "Deflated"
         }
+        drawCurrentPressure()
     }
     
     func setDeviceStatusButton() {
@@ -143,6 +151,10 @@ class MainViewController: UIViewController {
         }
     }
     
+    func drawCurrentPressure() {
+         pressureView.setNeedsDisplay()
+    }
+    
     func setCurrentLabels() {
         currentHRLabel.text = String(getHR())
         currentNoiseLabel.text = String(format: "%.1f", getNoise())
@@ -154,6 +166,12 @@ class MainViewController: UIViewController {
         currentNoiseLabel.textColor = textColor
         currentTempLabel.textColor = textColor
         currentAccelLabel.textColor = textColor
+        drawCurrentPressure()
+        if (getActivationStatus()) {
+            activeLabel.text = "ACTIVE"
+        } else {
+            activeLabel.text = ""
+        }
     }
     
     func setRangeLabels() {
@@ -161,6 +179,11 @@ class MainViewController: UIViewController {
         setRangeLabel(rangeNoiseLabel, thresholds: noiseThreshold)
         setRangeLabel(rangeTempLabel, thresholds: tempThreshold)
         setRangeLabel(rangeAccelLabel, thresholds: accelThreshold)
+        if (lightThreshold.isOn) {
+            lightLabel.textColor = UIColor.black
+        } else {
+            lightLabel.textColor = UIColor.lightGray
+        }
     }
     
     func setRangeLabel(_ label : UILabel, thresholds: Threshold) {
@@ -204,4 +227,35 @@ class MainViewController: UIViewController {
     func loadThreshold(fromPath: URL) -> Threshold? {
         return NSKeyedUnarchiver.unarchiveObject(withFile: fromPath.path) as? Threshold
     }
+}
+class LevelView : UIView {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    override func draw(_ rect: CGRect)
+    {
+        let view_height = 250
+        let context = UIGraphicsGetCurrentContext()
+        // draw the overall outline of total pressure
+        let outer_rectangle = CGRect(x: 0,y: 0,width: 619,height: view_height)
+        if (getActivationStatus()) {
+            context?.setLineWidth(20.0)
+            context?.setFillColor(UIColor(red:0.40, green:0.70, blue:0.38, alpha:1.0).cgColor)
+            context?.addRect(outer_rectangle)
+            context?.fillPath()
+        } else {
+            context?.setLineWidth(2.0)
+            context?.setStrokeColor(UIColor.black.cgColor)
+            context?.addRect(outer_rectangle)
+            context?.strokePath()
+        }
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
 }

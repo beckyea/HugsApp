@@ -13,6 +13,7 @@ public func parseCurrValueString(_ str: String) {
     var t_index : Int!;
     var a_index : Int!;
     var i_index : Int!;
+    var c_index : Int!;
     for (index, char) in str.enumerated() {
         if (char == "h" && h_index == nil) { h_index = index; }
         else if (char == "h") { h_index = nil; }
@@ -24,6 +25,8 @@ public func parseCurrValueString(_ str: String) {
         else if (char == "a") { a_index = nil; }
         if (char == "i" && i_index == nil) { i_index = index; }
         else if (char == "i") { i_index = nil; }
+        if (char == "c" && c_index == nil) { c_index = index; }
+        else if (char == "c") { c_index = nil; }
 
     }
     if (h_index != nil && n_index != nil && n_index > h_index) {
@@ -38,9 +41,13 @@ public func parseCurrValueString(_ str: String) {
         let tempTemp = str.substring(with:t_index+1..<a_index);
         setTemp(Int(tempTemp)!);
     }
-    if (a_index != nil && i_index != nil && i_index > a_index) {
-        let tempAccel = str.substring(with: a_index+1..<i_index);
+    if (a_index != nil && c_index != nil && c_index > a_index) {
+        let tempAccel = str.substring(with: a_index+1..<c_index);
         setAccel(Double(tempAccel)!);
+    }
+    if (c_index != nil && i_index != nil && i_index > c_index) {
+        let tempPressure = str.substring(with: c_index+1..<i_index);
+        setCurrP(Double(tempPressure)!);
     }
     if (i_index != nil && i_index + 1 < str.count) {
         if (inProactiveMode) {

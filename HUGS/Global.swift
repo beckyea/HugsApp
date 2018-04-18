@@ -96,24 +96,27 @@ public var userVars = SystemVariables(userName: "",
 public var heartRateThreshold = Threshold(isOn: false, upperBound: 75.0, lowerBound: 65.0)
 public var noiseThreshold = Threshold(isOn: false, upperBound: 50.0, lowerBound: nil)
 public var accelThreshold = Threshold(isOn: false, upperBound: 1.0, lowerBound: nil)
-public var tempThreshold = Threshold(isOn: false, upperBound: 70.0, lowerBound: 60.0)
+public var tempThreshold = Threshold(isOn: false, upperBound: 35.0, lowerBound: 5.0)
 public var lightThreshold = Threshold(isOn: false, upperBound: nil, lowerBound: nil)
 
 // READINGS
 private var currentHR : Int = 70;
 private var currentNoise : Double = 50.0;
-private var currentTemp : Int = 60;
+private var currentTemp : Int = 20;
 private var currentAccel : Double = 1.0;
+private var currentPressure: Double = 0;
 
 public func getHR() -> Int { return currentHR; }
 public func getNoise() -> Double { return currentNoise; }
 public func getTemp() -> Int { return currentTemp; }
 public func getAccel() -> Double { return currentAccel; }
+public func getCurrP() -> Double { return currentPressure; }
 
 public func setHR(_ hr:Int) { currentHR = hr; }
 public func setNoise(_ noise:Double) { currentNoise = noise; }
 public func setTemp(_ temp:Int) { currentTemp = temp; }
 public func setAccel(_ accel:Double) { currentAccel = accel; }
+public func setCurrP(_ pressure:Double) { currentPressure = pressure/50.0; }
 
 // TOGGLEABLE STATES
 public var inProactiveMode : Bool = false;
